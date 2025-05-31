@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  tiddlypwa-sync-server:
+    container_name: tiddlypwa-sync-server
+    image: tiddlypwa-sync-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./admin_hash.env:/app/admin_hash
+      - ./tiddly-db:/app/db:U
+    restart: unless-stopped
+
+  # Optional service for generating admin password hash
+  admin-hash-generator:
+    image: tiddlypwa-sync-server
+    command: /app/hash-admin-password.sh
+
+  # Optional service for reloading remote code
+  code-reloader:
+    image: tiddlypwa-sync-server
+    command: /app/reload-remote-code.sh
