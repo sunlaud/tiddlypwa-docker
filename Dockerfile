@@ -1,13 +1,3 @@
-# Original TiddlyPWA: https://tiddly.packett.cool/#
-# requires two mounts: admin hash file and a directory for DB (should be writable by internal 'deno' user, the easiest way is to mount with :U modifier)
-# to run  server: `podman run -it --rm -p 8000:8000 -v ./admin_hash.env:/app/admin_hash -v ./tiddly-db:/app/db:U tiddlypwa-sync-server`
-# to run admin password hasher: `podman run -it --rm tiddlypwa-sync-server hash-admin-password.sh`
-# to peek into container: `podman run -it --rm tiddlypwa-sync-server /bin/bash`
-# built with: `podman build -t tiddlypwa-sync-server .`
-# to run shell with permissions as inside of rootless container (withing podman user namespace): podman unshare zsh
-# to make deno download and cache all dependencies of the script: `deno install --allow-import --entrypoint https://scrip.ts`
-# to forbid deno run without previously cached deps: `deno run --cached-only https://scrip.ts`
-
 FROM docker.io/denoland/deno:latest
 
 ARG SERVER_SCRIPT_URL="https://codeberg.org/valpackett/tiddlypwa/raw/branch/release/server/run.ts"
