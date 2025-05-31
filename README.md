@@ -5,7 +5,7 @@ Original TiddlyPWA: https://tiddly.packett.cool/#
 
 # Launch
 
-Requires two mounts:
+Server requires two mounts:
  * admin hash file mounted as `/app/admin_hash`
  * directory for DB mounted as `/app/db` (should be writable by internal `deno` user, the easiest way is to mount with `:U` modifier, though it will change owner on host to mapped user inside container)
 
@@ -14,6 +14,8 @@ Requires two mounts:
 To run  server: `podman run -it --rm -p 8000:8000 -v ./admin_hash.env:/app/admin_hash -v ./tiddly-db:/app/db:U tiddlypwa-sync-server`
 
 To run admin password hasher: `podman run -it --rm tiddlypwa-sync-server hash-admin-password.sh`
+
+To reload (update) server code from remove repositories: `podman run -it --rm tiddlypwa-sync-server reload-remote-code.sh`
 
 
 # Misc useful stuff
