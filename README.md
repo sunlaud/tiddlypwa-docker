@@ -13,10 +13,14 @@ Upstream server code: https://codeberg.org/valpackett/tiddlypwa
 To build image: `podman build -t tiddlypwa-sync-server .`
 
 Running server requires two mounts:
- * admin hash file mounted as `/app/admin_hash`
+ * admin hash file mounted as `/run/secrets/admin_hash`
  * directory for DB mounted as `/app/db` (should be writable by internal `deno` user, the easiest way is to mount with `:U` modifier, though it will change owner on host to mapped user inside container)
 
-To run  server: `podman run -it --rm -p 8000:8000 -v ./admin_hash.env:/app/admin_hash -v ./tiddly-db:/app/db:U tiddlypwa-sync-server`
+Prerequisite: a directory for wikis DB on host: `mkdir tiddly-db`.
+
+To run server with with admin hash as secret: `podman run -it --rm -p 8000:8000 --secret tiddlypwa_admin_hash,type=mount -v ./tiddly-db:/app/db:U tiddlypwa-sync-server`
+
+Before running you should create a secret: `podman secret create tiddlypwa_admin_hash ./admin_hash.env`
 
 To run admin password hasher: `podman run -it --rm tiddlypwa-sync-server hash-admin-password.sh`
 

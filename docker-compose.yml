@@ -7,16 +7,25 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./admin_hash.env:/app/admin_hash
       - ./tiddly-db:/app/db:U
+    secrets:
+      - source: tiddlypwa_admin_hash
     restart: unless-stopped
 
   # Optional service for generating admin password hash
   admin-hash-generator:
     image: tiddlypwa-sync-server
     command: /app/hash-admin-password.sh
+    profiles:
+      - admin-hash
 
   # Optional service for reloading remote code
   code-reloader:
     image: tiddlypwa-sync-server
     command: /app/reload-remote-code.sh
+    profiles:
+      - code-reload
+
+secrets:
+  tiddlypwa_admin_hash :
+    file: ./admin_hash.env
